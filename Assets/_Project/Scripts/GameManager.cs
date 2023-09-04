@@ -8,13 +8,19 @@ public class GameManager : MonoBehaviour
 {
     private List<Card> cards = new List<Card>();
 
+    public List<Card> Cards
+    {
+        get{  return cards; }
+        set{ }
+    }
+
     private string firstCardName;
     private string secondCardName;
     private GameObject firstCard;
     private GameObject secondCard;
     private bool rotate = true;
 
-    public event Action OnCardListChange;
+    public event Action OnCardListChange, OnCardsListCreate;
 
     public static GameManager Instance { get; private set; }
 
@@ -43,6 +49,7 @@ public class GameManager : MonoBehaviour
         {
             card.IsCardOpened += GetNamesOfOpendCards;
         }
+        OnCardsListCreate?.Invoke();
     }
 
 
@@ -82,12 +89,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator CompareCardsNames()
     {
-        yield return new WaitForSeconds(1.7f);
-        //Debug.Log("Compare Name");
+        yield return new WaitForSeconds(0.7f);
         if (firstCard.GetComponentInChildren<SpriteRenderer>().sprite.name == secondCard.GetComponentInChildren<SpriteRenderer>().sprite.name)
         {
             OnCardListChange?.Invoke();
-            Debug.Log(firstCardName +" "+ secondCardName);
+
             cards.Remove(firstCard.GetComponent<Card>());
             cards.Remove(secondCard.GetComponent<Card>());
             //OnCardListChange?.Invoke();
@@ -110,7 +116,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ResetCards()
     {
-        yield return new WaitForSeconds(1f); // Delay before flipping the cards back.
+        yield return new WaitForSeconds(0f); // Delay before flipping the cards back.
         //Debug.Log("Reset Cards");
         // Reset the first card.
         Card firstCardComponent = firstCard.GetComponent<Card>();

@@ -35,14 +35,15 @@ public class GameProgressBar : MonoBehaviour
             GetPercentOfRemovedCards();
         }
         int currentNumOfCards = GameManager.Instance.GetNuberOfCardsInGame() -2;
-        Debug.Log(currentNumOfCards);
+        
         ChangeBarText();
         OnValueChanged(currentNumOfCards, numsOfCards);
         
         if (valueOfProgressBar >= 100)
         { 
             Unsubscribe();
-            Debug.Log("you win");
+            barText.text = "100 %";
+            
         }
         else
         {

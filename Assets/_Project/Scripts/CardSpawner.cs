@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CardSpawner : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CardSpawner : MonoBehaviour
     private void Start()
     {
         SpawnPrefabs();
+        GameManager.Instance.OnCardsListCreate += ShuffleCards;
     }
 
     private void SpawnPrefabs()
@@ -40,7 +42,32 @@ public class CardSpawner : MonoBehaviour
             }
         }
     }
+
+    private void ShuffleCards()
+    {
+        var cards = GameManager.Instance.Cards;
+
+
+        List<Vector3> cardsPosition = new List<Vector3>();
+        foreach (var card in cards)
+        {
+            cardsPosition.Add(card.gameObject.transform.position);
+
+        }
+
+        for (int i=0; i<cards.Count;i++)
+        {
+            int randIndex = Random.Range(0, cardsPosition.Count);
+            
+            var position = cardsPosition[randIndex];
+            cards[i].gameObject.transform.position = position ;
+            cardsPosition.RemoveAt(randIndex);
+
+        }
+        GameManager.Instance.OnCardsListCreate -= ShuffleCards;
+    }
 }
+
 
 
 
